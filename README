@@ -1,1 +1,44 @@
+db.zen_class.insertMany([
 
+  {
+    user_id=1,
+    user_name="Jerome",
+    user_email=""jerom123@gmail.com",
+    codekatta:[
+      {topic:"Input_Output" total_question=10 problems_solved=10 finished:true},
+      {topic:"absolute_beginner" total_question=30 problems_solved=30 finished:true},
+      {topic:"array" total_question=308 problems_solved=100 finished:false},
+      {topic:"mathematics" total_question=192 question_completed=12 finished:false},
+      {topic:"strings" total_question=196 question_completed=196 finished:truw},
+    ],
+    attendance: [
+      { date: ISODate("2020-10-15"), status: "Present" },
+      { date: ISODate("2020-10-16"), status: "Present" },
+      { date: ISODate("2020-10-17"), status: "Present" },
+      { date: ISODate("2020-10-18"), status: "Present" },
+      { date: ISODate("2020-10-19"), status: "Absent" },
+      { date: ISODate("2020-10-20"), status: "Present" },
+      { date: ISODate("2020-10-21"), status: "Present" },
+      { date: ISODate("2020-10-22"), status: "Present" },
+      { date: ISODate("2020-10-23"), status: "Absent" },
+      { date: ISODate("2020-10-25"), status: "Absent" },
+      { date: ISODate("2020-10-26"), status: "Present" },
+      { date: ISODate("2020-10-27"), status: "Present" },
+      { date: ISODate("2020-10-28"), status: "Present" },
+    ],
+    topics: [
+      { topic_name: "Html", topic_date: ISODate("2020-10-15") },
+      { topic_name: "Css", topic_date: ISODate("2020-10-17") },
+      { topic_name: "Javascript", topic_date: ISODate("2020-10-20") },
+      { topic_name: "React Js", topic_date: ISODate("2020-10-25") },
+    ],
+    company_drives: [
+      {company: "Microsoft",date: ISODate("2020-10-27"), appeared: false},
+      {company: "Zoho",date: ISODate("2020-10-28"), appeared: true},
+    ],
+    mentor:{
+      mentor_name:"Vasanth",
+      mantor_id=101,
+      mentor_email:vasanth@gmail.com
+  },
+]
