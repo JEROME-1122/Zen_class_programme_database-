@@ -32,6 +32,12 @@ db.zen_class.insertOne(
       { topic_name: "Javascript", topic_date: ISODate("2020-10-20") },
       { topic_name: "React Js", topic_date: ISODate("2020-10-25") },
     ],
+     tasks: [
+      { task_name: "HTML Task", task_date: ISODate("2020-10-16"), submitted: true },
+      { task_name: "CSS Task", task_date: ISODate("2020-10-18"), submitted: true },
+      { task_name: "JavaScript Task", task_date: ISODate("2020-10-21"), submitted: false },
+      { task_name: "React JS Task", task_date: ISODate("2020-10-26"), submitted: true }
+    ],
     company_drives: [
       {company: "Microsoft",date: ISODate("2020-10-27"), appeared: false},
       {company: "Zoho",date: ISODate("2020-10-28"), appeared: true},
@@ -42,3 +48,62 @@ db.zen_class.insertOne(
       mentor_email:vasanth@gmail.com
   },
 )
+
+
+
+
+question 
+1) Find all the topics and tasks which are thought in the month of October
+
+  db.zen_class.aggregate([
+    {$unwind:"$topics"},
+    {$match: {"topics.topic_date": {$gte: ISODate("2020-10-01"),$lte: ISODate("2020-10-31")}}},
+    {$project:{_id:0, username:1,topic_name:"$topics.topic_name",topic_date:"$topics.topic_date}
+   )]  
+// unwind used to breake the array one by one and the we can check the condition if greathan than oct1 and lessthan 31 of oct from topics and  shwo the value 
+// same like task also 
+
+  db.zen_class.aggregate([
+    {$unwind:"$tasks"},
+    {$match: {"tasks.task_date": {$gte: ISODate("2020-10-01"),$lte: ISODate("2020-10-31")}}},
+    {$project:{_id:0, username:1,task_name:"$tasks.task_name",task_date:"$tasks.task_date}
+   )]  
+2) Find all the company drives which appeared between 15 oct-2020 and 31-oct-2020
+  db.zen_class.aggregate([
+    {$unwind:"$company_drives"},
+    {$match:{"company_drives.date":{$gte: ISODate("2020-10-15"),$lte: ISODate("2020-10-31")}}},
+    {$project:{_id:0,user_name:1,company: "$company_drives.company", date: "$company_drives.date",appeared: "$company_drives.appeared"}}
+  )]    
+// same like first question but here date only different 
+
+3) Find all the company drives and students who are appeared for the placement.
+  db.zen_class.aggregate([
+    {$unwind:"$company_drives"},   // break the array 
+    {$match:"company_drives.appeared:true},  // condition if appreared is true then display the value 
+    {$project:{_id:0,user_name:1,company: "$company_drives.company", date: "$company_drives.date",appeared: "$company_drives.appeared"}}
+  ]);
+// in here we are add the condition if appeared is true display all the company drives 
+
+4) Find the number of problems solved by the user in codekata
+    db.zen_class.aggregate([
+      {$unwind:"$codekatta},  // breake the array
+      {$group:{_id:"$username",proplem_solved:{$sum:"$codekatta.problems_solved"}}}    // group the user name and codekatta  problems_solved
+    ])
+//first breake the codekatta array and group the name and how many problem solved using sum 
+
+5) Find all the mentors with who has the mentee's count more than 15
+  db.zen_class.aggregate([
+  {$group:{_id:"$mentor.mentor_name",mentee_count:{$sum:1}},   
+  {$match:{mentee_count:{$gt:15}}}   // shwo the mentee count greather than 15
+  ])
+
+6) Find the number of users who are absent and task is not submitted  between 15 oct-2020 and 31-oct-2020
+ db.zen_class.aggregate([
+   { $unwind: "$attendance" }, { $unwind: "$tasks" },  // breake the array 
+    {$match: {"tasks.task_date": {$gte: ISODate("2020-10-01"),$lte: ISODate("2020-10-31")}}},    //  between 15 oct-2020 and 31-oct-2020 using match in task
+   {$match: {"attendance.date": { $gte: ISODate("2020-10-15"), $lte: ISODate("2020-10-31") },"attendance.status": "Absent",
+      "tasks.date": { $gte: ISODate("2020-10-15"), $lte: ISODate("2020-10-31") },"tasks.submitted": false}
+    },
+    {$group: { _id: "$user_name" }},  // to get only unique users
+    {$count: "total_users" }     // final count
+   )] 
